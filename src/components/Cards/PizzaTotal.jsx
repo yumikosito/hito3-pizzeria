@@ -9,16 +9,8 @@ const PizzaTotal = (pizza) => {
   const [count, setCount] = useState(1)
   const plusTotal=precioFormat*count
   const totalFormat= new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(plusTotal)
-  
-  
-  function plus(){
-    setCount(count + 1)
 
-  }
 
-  function minus(){
-    setCount(count - 1)
-  }
 
   return (
     <div>
@@ -34,11 +26,11 @@ const PizzaTotal = (pizza) => {
               <p>{pizza.ingredients.join(", ")}</p>
             </div>
             <div className="col-md-3 col-lg-3 col-xl-2 d-flex">
-              <button className="btn btn-link px-2" onClick={minus}> <FontAwesomeIcon icon={faMinus} />
+              <button className="btn btn-link px-2" onClick={()=> pizza.modificacionAct(pizza=pizza, setCount(count-1), count-1)}> <FontAwesomeIcon icon={faMinus} />
               </button>
-              <input className="form-control" type="text" placeholder="Default input" value={count}></input>
+              <input className="form-control" min={0} type="text" placeholder="Default input" value={count}></input>
 
-              <button className="btn btn-link px-2" onClick={plus}> <FontAwesomeIcon icon={faPlus} />
+              <button className="btn btn-link px-2" onClick={()=> pizza.modificacionAct(pizza=pizza, setCount(count+1), count+1)}> <FontAwesomeIcon icon={faPlus} />
               </button>
             </div>
             <div className="col-md-3 col-lg-2 col-xl-2 offset-lg-1">

@@ -7,13 +7,37 @@ import { useState } from 'react'
 
 
 const Cart = () => {
-  const [count, setCount] = useState(0)
-  let total=10
-  function actCart(){
-    total=total+1
+  const [cart,setCart]= useState(PizzaCart)
+
+  let total= cart.reduce((accumulator ,item) => {
+     return accumulator += (parseInt(item.price)*parseInt(item.cantidad));
+  }, 0)
+  
+  const totalCLP= new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(total)
+
+  function modificacion(pizza, nada, count){
+    let coincidencia=cart.findIndex(item=> item.id===pizza.id)
+    let newPizza= {id:pizza.id,desc:pizza.desc, cantidad:1, ingredients:pizza.ingredients, img:pizza.img, price: pizza.price}
+
+    if(coincidencia>=0 ){
+      setCart(cart.map(t => {
+        if (t.id === pizza.id) {
+          return {id:pizza.id, desc:pizza.desc, cantidad:count, ingredients:pizza.ingredients, img:pizza.img, price: pizza.price};
+        } else {
+          return t;
+        }
+      }))
+
+      if (count===0){
+        cart.splice(coincidencia,1)
+        return
+      }
+
+    } else{
+      setCart([...cart,newPizza])
+    }
+
   }
-
-
 
 
 
@@ -32,7 +56,7 @@ const Cart = () => {
             </div>
 
             {PizzaCart.map(item=> (
-              <PizzaTotal key={item.id} name={item.name} price={item.price} ingredients={item.ingredients} img={item.img} actualizarCarro={actCart}/>
+              <PizzaTotal key={item.id} name={item.name} price={item.price} ingredients={item.ingredients} img={item.img} modificacionAct={modificacion} id={item.id}/>
             ))}
 
             <div className="card mb-4">
@@ -49,7 +73,7 @@ const Cart = () => {
               <div className="card-body">
                 <div className="float-end">
                   <p className="mb-0 me-5 d-flex align-items-center">
-                    <span className="medium text-muted me-2">Total compra:</span> <span className="lead fw-normal">{total}</span>
+                    <span className="medium text-muted me-2">Total compra:</span> <span className="lead fw-normal">{totalCLP}</span>
                   </p>
                 </div>
               </div>
